@@ -1,16 +1,20 @@
+// This code is identical to script.js, but somehow this one
+// doesn't draw the bricks. I tried to fix for hours, but
+// in the end i just gav eup and rewrote the entire code.
+// Let this document serve as a monument to how f this profession
+// is.
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
-
-var ballRadius = 10;
 
 var x = canvas.width/2;
 var y = canvas.height-30;
 var dx = 2;
-var dy = -2;
+var dy = -2;    
+var ballRadius = 10;
 
 var paddleHeight = 10;
 var paddleWidth = 75;
-var paddleX = (canvas.width-paddleWidth)/2;
+var paddleX = (canvas.width-paddleWidth) / 2;
 
 var rightPressed = false;
 var leftPressed = false;
@@ -53,19 +57,22 @@ function keyUpHandler(e) {
 }
 
 function drawBall() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.beginPath();
     ctx.arc(x, y, ballRadius, 0, Math.PI*2);
-    ctx.fillStyle = "Black";
+    ctx.fillstyle = "black";
     ctx.fill();
     ctx.closePath();
 }
+
 function drawPaddle() {
     ctx.beginPath();
     ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = "Black";
+    ctx.fillStyle = "black";
     ctx.fill();
     ctx.closePath();
 }
+
 function drawBricks() {
     for(var c=0; c<brickColumnCount; c++) {
         for(var r=0; r<brickRowCount; r++) {
@@ -75,7 +82,7 @@ function drawBricks() {
             bricks[c][r].y = brickY;
             ctx.beginPath();
             ctx.rect(brickX, brickY, brickWidth, brickHeight);
-            ctx.fillStyle = "Black";
+            ctx.fillStyle = "black";
             ctx.fill();
             ctx.closePath();
         }
@@ -84,38 +91,42 @@ function drawBricks() {
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
     drawBricks();
     drawBall();
     drawPaddle();
     
+    x += dx;
+    y += dy;
+    
     if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
         dx = -dx;
     }
+
     if(y + dy < ballRadius) {
         dy = -dy;
-    }
-    else if(y + dy > canvas.height-ballRadius) {
+    } else if(y + dy > canvas.height-ballRadius) {
         if(x > paddleX && x < paddleX + paddleWidth) {
-           if(y= y-paddleHeight){
-            dy = -dy  ;
-             }
-        }
+            dy = -dy;
+        }   
         else {
-            alert("GAME OVER");
-            document.location.reload();
-            clearInterval(interval);
+        alert("GAME OVER");
+        document.location.reload();
+        clearInterval(interval);
         }
     }
-    
-    if(rightPressed && paddleX < canvas.width-paddleWidth) {
+
+    if(rightPressed) {
         paddleX += 7;
-    }
-    else if(leftPressed && paddleX > 0) {
+        if (paddleX + paddleWidth > canvas.width){
+            paddleX = canvas.width - paddleWidth;
+        }
+    } else if(leftPressed) {
         paddleX -= 7;
+        if (paddleX < 0){
+            paddleX = 0;
+        }
     }
-    
-    x += dx;
-    y += dy;
 }
 
 var interval = setInterval(draw, 10);
