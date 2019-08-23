@@ -67,7 +67,6 @@ function collisionDetection() {
                     if(score == brickRowCount*brickColumnCount) {
                     	alert("YOU WIN, CONGRATULATIONS!");
                     	document.location.reload();
-                    	clearInterval(interval);
                     }
                 }
             }
@@ -146,7 +145,6 @@ function draw() {
             if(!lives) {
                 alert("GAME OVER");
                 document.location.reload();
-                clearInterval(interval);
             }
 else {
     x = canvas.width/2;
@@ -167,7 +165,9 @@ else {
     
     x += dx;
     y += dy;
+
+requestAnimationFrame(draw);
 }
 
 
-var interval = setInterval(draw, 10);
+draw();
